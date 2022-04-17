@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @Column(unique = true)
@@ -26,6 +27,14 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+
+    public User(String name, String username, String password) {
+        this.id = null;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.roles = new ArrayList<>();
+    }
 
     public User setName(String name) {
         this.name = name;

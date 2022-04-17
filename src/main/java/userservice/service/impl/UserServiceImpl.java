@@ -33,6 +33,8 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         log.info("Saving new user {} to the database", user.getName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getRoles().add(roleRepository.findByName(Role.ROLE_USER)
+                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND)));
         return userRepository.saveAndFlush(user);
     }
 
