@@ -20,6 +20,7 @@ import userservice.util.JwtCenter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -69,7 +70,7 @@ public class UserController {
     }
 
     @PostMapping("/users/register")
-    public ResponseEntity<JsendResponse<User>> saveUser(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<JsendResponse<User>> saveUser(@RequestBody @Valid RegisterRequest registerRequest) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users").toUriString());
         // could use a mapper
         User user = new User(registerRequest.getName(), registerRequest.getUsername(), registerRequest.getPassword());

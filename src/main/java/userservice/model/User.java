@@ -1,6 +1,7 @@
 package userservice.model;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.Collection;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +55,11 @@ public class User {
 
     public User setRoles(Collection<Role> roles) {
         this.roles = roles;
+        return this;
+    }
+
+    public User setId(Long id) {
+        this.id = id;
         return this;
     }
 }
