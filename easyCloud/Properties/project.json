@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    //"PackageID": "{version_constraint}"
+    //Azure
+    "Microsoft.Azure.WebJobs": "3.0.32",
+    "Microsoft.Azure.WebJobs.Extensions.Http": "3.0.12",
+    "Microsoft.Azure.WebJobs.Extensions.Storage": "4.0.5",
+    "Microsoft.Azure.Cosmos": "3.26.1",
+    "Microsoft.Azure.Cosmos.Table": "1.0.8",
+    "Microsoft.Azure.Functions.Extensions": "1.1.0",
+    //OpenAPI
+    "AzureExtensions.Swashbuckle": "3.3.2",
+    "AzureFunctions.Extensions.Swashbuckle": "1.4.4",
+    //Insigh
+    "Microsoft.Extensions.Configuration.UserSecrets": "6.0.0",
+    "Microsoft.ApplicationInsights.WorkerService": "2.15.0",
+    //AspNetCore
+    "Microsoft.AspNetCore": "2.2.0",
+    //Functions
+    "Microsoft.NET.Sdk.Functions": "4.1.0"
+  },
+  "frameworks": {
+    //"TxM": {}
+  },
+  "runtimes": {
+    //"RID": {}
+  },
+  "supports": {
+    //"CompatibilityProfile": {}
+  }
+}
