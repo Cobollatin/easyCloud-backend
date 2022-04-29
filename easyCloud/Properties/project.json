@@ -16,6 +16,7 @@
     "Microsoft.ApplicationInsights.WorkerService": "2.15.0",
     //AspNetCore
     "Microsoft.AspNetCore": "2.2.0",
+    "Microsoft.AspNetCore.AzureKeyVault.HostingStartup": "2.0.4",
     //Functions
     "Microsoft.NET.Sdk.Functions": "4.1.0"
   },
