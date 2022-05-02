@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.Azure.Cosmos.Table;
 
-namespace extraAhorro.Models
+namespace easyCloud.Models
 {
     public class SessionTable : TableEntity
     {
-        public string OauthToken { get; set; }
+        public string AccountToken { get; set; }
         public string SessionToken { get; set; }
         public bool IsActive { get; set; }
         public DateTime Start { get; set; }
@@ -15,7 +15,7 @@ namespace extraAhorro.Models
     public class Session
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string OauthToken { get; set; }
+        public string AccountToken { get; set; }
         public string SessionToken { get; set; } = Guid.NewGuid().ToString();
         public bool IsActive { get; set; } = true;
         public DateTime Start { get; set; } = DateTime.Now;
@@ -48,7 +48,7 @@ namespace extraAhorro.Models
             {
                 PartitionKey = "SESSION",
                 RowKey = session.Id,
-                OauthToken = session.OauthToken,
+                AccountToken = session.AccountToken,
                 SessionToken = session.SessionToken,
                 IsActive = session.IsActive,
                 Start = session.Start,
@@ -61,7 +61,7 @@ namespace extraAhorro.Models
             return new Session
             {
                 Id = session.RowKey,
-                OauthToken = session.OauthToken,
+                AccountToken = session.AccountToken,
                 IsActive = session.IsActive,
                 Start = session.Start,
                 End = session.End

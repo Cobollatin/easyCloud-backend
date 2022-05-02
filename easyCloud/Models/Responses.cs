@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace extraAhorro.Models.Responses
+namespace easyCloud.Models.Responses
 {
 
     public class Error

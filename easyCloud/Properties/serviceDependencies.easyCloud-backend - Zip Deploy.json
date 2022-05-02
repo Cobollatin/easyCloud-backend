@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "storage1": {
+      "secretStore": null,
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/easycloudstorage",
       "type": "storage.azure",
       "connectionId": "AzureWebJobsStorage"

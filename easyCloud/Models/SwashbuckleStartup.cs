@@ -3,8 +3,8 @@ using AzureFunctions.Extensions.Swashbuckle;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 
 
-[assembly: FunctionsStartup(typeof(extraAhorro.Swashbuckle.SwashbuckleStartup))]
-namespace extraAhorro.Swashbuckle
+[assembly: FunctionsStartup(typeof(easyCloud.Swashbuckle.SwashbuckleStartup))]
+namespace easyCloud.Swashbuckle
 {
     public class SwashbuckleStartup : FunctionsStartup
     {

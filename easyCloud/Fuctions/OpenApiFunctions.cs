@@ -6,7 +6,7 @@ using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 
-namespace extraAhorro.OpenApi
+namespace easyCloud.OpenApi
 {
     public static class OpenApiFunctions
     {

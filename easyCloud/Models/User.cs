@@ -1,14 +1,13 @@
 ﻿using System;
 using Microsoft.Azure.Cosmos.Table;
 
-namespace extraAhorro.Models
+namespace easyCloud.Models
 {
     public class UserTable : TableEntity
     {
         public string OauthToken { get; set; }
         public string Name { get; set; } = "";
         public string Email { get; set; } = "";
-        public bool IsSeller { get; set; } = false;
     }
 
     public class User
@@ -17,7 +16,6 @@ namespace extraAhorro.Models
         public string OauthToken { get; set; } = "";
         public string Name { get; set; } = "";
         public string Email { get; set; } = "";
-        public bool IsSeller { get; set; } = false;
     }
 
     public class CreateUserDto
@@ -25,7 +23,6 @@ namespace extraAhorro.Models
         public string OauthToken { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public bool IsSeller { get; set; }
     }
 
     public static class UserExtensions
@@ -38,8 +35,7 @@ namespace extraAhorro.Models
                 RowKey = user.Id,
                 OauthToken = user.OauthToken,
                 Name = user.Name,
-                Email = user.Email,
-                IsSeller = user.IsSeller
+                Email = user.Email
             };
         }
 
@@ -50,8 +46,7 @@ namespace extraAhorro.Models
                 Id = userTable.RowKey,
                 OauthToken = userTable.OauthToken,
                 Name = userTable.Name,
-                Email = userTable.Email,
-                IsSeller = userTable.IsSeller
+                Email = userTable.Email
             };
         }
     }
