@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace easyCloud
 {
-    public static class CredetialsValidator
+    public static class SessionValidator
     {
         [FunctionName("CredetialsValidator")]
         public static async Task<IActionResult> Run(

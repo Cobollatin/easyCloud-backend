@@ -17,10 +17,10 @@ namespace easyCloud.Models
     public class Account
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Token;
+        public string Token { get; set; } = Guid.NewGuid().ToString();
         public string Username { get; set; }
-        public string Email { get; set; } = "";
-        public string Password;
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
 

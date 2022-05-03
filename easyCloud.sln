@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyCloud", "easyCloud\easyCloud.csproj", "{1A9971E8-9064-41DA-8F4C-5B25000B7312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "easyCloudTesting", "easyCloudTesting\easyCloudTesting.csproj", "{218B8BF6-FCAE-4726-A920-91DD2F20253D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyCloudTesting", "easyCloudTesting\easyCloudTesting.csproj", "{218B8BF6-FCAE-4726-A920-91DD2F20253D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
