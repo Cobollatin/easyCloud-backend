@@ -1,0 +1,73 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2022-05-02T01:11:46.22605Z"
+    },
+    "storage1": {
+      "restored": true,
+      "restoreTime": "2022-05-02T01:11:52.7935438Z"
+    },
+    "appInsights1": {
+      "restored": true,
+      "restoreTime": "2022-05-02T01:11:51.4277004Z"
+    }
+  },
+  "parameters": {
+    "easyCloud-backend.resourceGroupLocation": {
+      "Name": "easyCloud-backend.resourceGroupLocation",
+      "Type": null,
+      "Value": "centralus"
+    },
+    "easyCloud-backend.resourceGroupName": {
+      "Name": "easyCloud-backend.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "easyCloud"
+    },
+    "secrets1.resourceGroupName": {
+      "Name": "secrets1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "easyCloud"
+    },
+    "storage1.resourceGroupName": {
+      "Name": "storage1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "easyCloud"
+    },
+    "appInsights1.subscriptionId": {
+      "Name": "appInsights1.subscriptionId",
+      "Type": "subscription",
+      "Value": "4e20f663-b147-4690-9a62-a09b9c2b57d0"
+    },
+    "storage1.subscriptionId": {
+      "Name": "storage1.subscriptionId",
+      "Type": "subscription",
+      "Value": "4e20f663-b147-4690-9a62-a09b9c2b57d0"
+    },
+    "easyCloud-backend.resourceName": {
+      "Name": "easyCloud-backend.resourceName",
+      "Type": null,
+      "Value": "easyCloud-backend"
+    },
+    "easyCloud-backend.subscriptionId": {
+      "Name": "easyCloud-backend.subscriptionId",
+      "Type": "subscription",
+      "Value": "4e20f663-b147-4690-9a62-a09b9c2b57d0"
+    },
+    "appInsights1.resourceGroupName": {
+      "Name": "appInsights1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "easyCloud"
+    },
+    "subscriptionId": {
+      "Name": "subscriptionId",
+      "Type": "subscription",
+      "Value": "4e20f663-b147-4690-9a62-a09b9c2b57d0"
+    },
+    "secrets1.subscriptionId": {
+      "Name": "secrets1.subscriptionId",
+      "Type": "subscription",
+      "Value": "4e20f663-b147-4690-9a62-a09b9c2b57d0"
+    }
+  }
+}
