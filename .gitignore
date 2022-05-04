@@ -256,6 +256,9 @@ paket-files/
 .idea/
 *.sln.iml
 
+# gradle
+.gradle
+
 # CodeRush
 .cr/
 
