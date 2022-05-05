@@ -51,7 +51,7 @@ namespace easyCloud
 
             if (password is null || password.Length > 32 || password.Length < 8)
             {
-                log.LogError("Invalid username");
+                log.LogError("Invalid password");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
                     { "error", "password must have from 8 to 32 characters" }
