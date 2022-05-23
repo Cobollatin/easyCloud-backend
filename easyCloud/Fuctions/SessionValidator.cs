@@ -7,19 +7,10 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace easyCloud
-{
-    public static class SessionValidator
-    {
-        [FunctionName("CredetialsValidator")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
-        {
-            log.LogInformation("Attempting to validate an user");
-
-
-            return new OkObjectResult("Validation is working");
-        }
+namespace easyCloud {
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class SessionValidator {
     }
 }

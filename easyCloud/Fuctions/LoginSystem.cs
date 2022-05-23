@@ -7,24 +7,32 @@ using easyCloud.Models;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
-using easyCloud.Models.Responses;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.IO;
+using easyCloud.Models.Shared;
 
-namespace easyCloud
-{
-    public static class LoginSystem
-    {
+namespace easyCloud {
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class LoginSystem {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="accountTableCollector"></param>
+        /// <param name="accountTable"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
         [FunctionName("Register")]
         public static async Task<IActionResult> Register(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "register")] HttpRequest req,
             [Table("Users", Connection = "AzureWebJobsStorage")] IAsyncCollector<AccountTable> accountTableCollector,
             [Table("Users", Connection = "AzureWebJobsStorage")] CloudTable accountTable,
-            ILogger log)
-        {
+            ILogger log) {
             log.LogInformation("Attempting to register an user");
 
             string username = req.Query["username"];
@@ -38,8 +46,7 @@ namespace easyCloud
             password = password ?? data?.password;
             email = email ?? data?.email;
 
-            if (username is null || username.Length > 18 || username.Length < 4)
-            {
+            if (username is null || username.Length is > 18 or < 4) {
                 log.LogError("Invalid username");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -49,23 +56,18 @@ namespace easyCloud
                 return new BadRequestObjectResult(fail);
             }
 
-            if (password is null || password.Length > 32 || password.Length < 8)
-            {
+            if (password is null || password.Length is > 32 or < 8) {
                 log.LogError("Invalid password");
-                Fail fail = new Fail(new Dictionary<string, string>()
-                {
+                Fail fail = new Fail(new Dictionary<string, string>() {
                     { "error", "password must have from 8 to 32 characters" }
                 }
                 );
                 return new BadRequestObjectResult(fail);
             }
 
-            try
-            {
+            try {
                 new MailAddress(email);
-            }
-            catch (FormatException)
-            {
+            } catch (FormatException) {
                 log.LogError("Invalid email");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -80,8 +82,7 @@ namespace easyCloud
             var queryResult = await accountTable.ExecuteQuerySegmentedAsync(query, null);
 
 
-            if (queryResult is null || queryResult.Results.Count != 0)
-            {
+            if (queryResult is null || queryResult.Results.Count != 0) {
                 log.LogError("Email already taken");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -94,8 +95,7 @@ namespace easyCloud
             query = new TableQuery<AccountTable>().Where(TableQuery.GenerateFilterCondition("Username", QueryComparisons.Equal, username));
             queryResult = await accountTable.ExecuteQuerySegmentedAsync(query, null);
 
-            if (queryResult is null || queryResult.Results.Count != 0)
-            {
+            if (queryResult is null || queryResult.Results.Count != 0) {
                 log.LogError("Username already taken");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -105,8 +105,7 @@ namespace easyCloud
                 return new BadRequestObjectResult(fail);
             }
 
-            await accountTableCollector.AddAsync(new Account()
-            {
+            await accountTableCollector.AddAsync(new Account() {
                 Username = username,
                 Password = Security.ComputeHash(password, new SHA256CryptoServiceProvider()),
                 Email = email,
@@ -125,13 +124,20 @@ namespace easyCloud
             }));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="userTable"></param>
+        /// <param name="sessionTable"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
         [FunctionName("Login")]
         public static async Task<IActionResult> Login(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "login")] HttpRequest req,
         [Table("Users", Connection = "AzureWebJobsStorage")] CloudTable userTable,
         [Table("Sessions", Connection = "AzureWebJobsStorage")] IAsyncCollector<SessionTable> sessionTable,
-        ILogger log)
-        {
+        ILogger log) {
 
             string username = req.Query["username"];
             string password = req.Query["password"];
@@ -142,8 +148,7 @@ namespace easyCloud
             username = username ?? data?.username;
             password = password ?? data?.password;
 
-            if (username is null || username.Length > 18 || username.Length < 4)
-            {
+            if (username is null || username.Length > 18 || username.Length < 4) {
                 log.LogError("Invalid username");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -152,13 +157,13 @@ namespace easyCloud
                 );
                 return new BadRequestObjectResult(fail);
             }
-
-            if (password is null || password.Length > 32 || password.Length < 8)
-            {
+            if (password is null || password.Length > 32 || password.Length < 8) {
                 log.LogError("Invalid username");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
-                    { "error", "password must have from 8 to 32 characters" }
+                    {
+                        "error", "password must have from 8 to 32 characters"
+                    }
                 }
                 );
                 return new BadRequestObjectResult(fail);
@@ -168,8 +173,7 @@ namespace easyCloud
             var query = new TableQuery<AccountTable>().Where(TableQuery.GenerateFilterCondition("Username", QueryComparisons.Equal, username));
             var queryResult = await userTable.ExecuteQuerySegmentedAsync(query, null);
 
-            if (queryResult is null || queryResult.Results.Count == 0)
-            {
+            if (queryResult is null || queryResult.Results.Count == 0) {
                 log.LogError("User not registered");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -182,8 +186,7 @@ namespace easyCloud
 
             var acc = queryResult.Results.Find(x => x.Password == Security.ComputeHash(password, new SHA256CryptoServiceProvider()));
 
-            if (acc is not null)
-            {
+            if (acc is not null) {
                 log.LogError("Wrong password");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -196,8 +199,7 @@ namespace easyCloud
             var seesionQuery = new TableQuery<SessionTable>().Where(TableQuery.GenerateFilterCondition("AccountToken", QueryComparisons.Equal, acc.Token));
             var sessionQueryResult = await userTable.ExecuteQuerySegmentedAsync(seesionQuery, null);
 
-            if (queryResult is null || sessionQueryResult.Results.Count != 0)
-            {
+            if (queryResult is null || sessionQueryResult.Results.Count != 0) {
                 log.LogInformation("User already logged in");
                 var currentSeesion = sessionQueryResult.Results.FindLast(x => x.IsActive == true).ToSession();
                 return new OkObjectResult(new Post<Session>(new List<Session> { currentSeesion }));
@@ -212,12 +214,18 @@ namespace easyCloud
             return new OkObjectResult(new Post<Session>(new List<Session> { session }));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="sessionTable"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
         [FunctionName("Logout")]
         public static async Task<IActionResult> Logout(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "logout")] HttpRequest req,
             [Table("Sessions", Connection = "AzureWebJobsStorage")] CloudTable sessionTable,
-            ILogger log)
-        {
+            ILogger log) {
             log.LogInformation("Attempting to logout an user");
 
             string accountToken = req.Query["AccountToken"];
@@ -229,8 +237,7 @@ namespace easyCloud
             accountToken = accountToken ?? data?.accountToken;
             sessionToken = sessionToken ?? data?.password;
 
-            if (!Guid.TryParse(accountToken, out _) || !Guid.TryParse(sessionToken, out _))
-            {
+            if (!Guid.TryParse(accountToken, out _) || !Guid.TryParse(sessionToken, out _)) {
                 log.LogInformation("Invalid tokens");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {
@@ -244,8 +251,7 @@ namespace easyCloud
             var queryResult = await sessionTable.ExecuteQuerySegmentedAsync(query, null);
 
             var lastSession = queryResult.Results.Find(x => x.AccountToken == accountToken && x.IsActive == true);
-            if (queryResult is null || queryResult.Results.Count == 0 || lastSession is null)
-            {
+            if (queryResult is null || queryResult.Results.Count == 0 || lastSession is null) {
                 log.LogInformation("User not logged in");
                 Fail fail = new Fail(new Dictionary<string, string>()
                 {

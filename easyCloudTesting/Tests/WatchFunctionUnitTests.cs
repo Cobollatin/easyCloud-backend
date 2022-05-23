@@ -12,19 +12,15 @@ using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
-using System.Security.Cryptography;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json;
+using easyCloud.Models.Shared;
 
-namespace extraAhorroTesting
-{
+namespace extraAhorroTesting {
 
-    public class LoginSystemTest
-    {
+    public class LoginSystemTest {
         [Fact]
-        public async Task Register_With_Valid_Credentials()
-        {
+        public async Task Register_With_Valid_Credentials() {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
@@ -44,8 +40,7 @@ namespace extraAhorroTesting
             var jsonWriter = new JsonTextWriter(streamWriter);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(jsonWriter, new
-            {
+            serializer.Serialize(jsonWriter, new {
                 email = mockEmail,
                 username = mockUsername,
                 password = mockPassword,
@@ -83,7 +78,7 @@ namespace extraAhorroTesting
 
             Assert.NotNull(okObjectResult);
 
-            var response = okObjectResult.Value as easyCloud.Models.Responses.Post<Account> ?? new easyCloud.Models.Responses.Post<Account>(new List<Account>());
+            var response = okObjectResult.Value as Post<Account> ?? new easyCloud.Models.Responses.Post<Account>(new List<Account>());
 
             Assert.Equal("success", response.status);
             Assert.Equal("test@extraahorro", response.data[0].Email);
@@ -91,8 +86,7 @@ namespace extraAhorroTesting
             Assert.Equal("*", response.data[0].Password);
         }
         [Fact]
-        public async Task Register_With_Invalid_Username()
-        {
+        public async Task Register_With_Invalid_Username() {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "user-";
             const string mockPassword = "password";
@@ -112,8 +106,7 @@ namespace extraAhorroTesting
             var jsonWriter = new JsonTextWriter(streamWriter);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(jsonWriter, new
-            {
+            serializer.Serialize(jsonWriter, new {
                 email = mockEmail,
                 username = mockUsername,
                 password = mockPassword,
@@ -151,7 +144,7 @@ namespace extraAhorroTesting
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as easyCloud.Models.Responses.Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
             {
                 { "error", "username must have from 4 to 12 characters" }
             }
@@ -164,8 +157,7 @@ namespace extraAhorroTesting
             }, response.data);
         }
         [Fact]
-        public async Task Register_With_Invalid_Password()
-        {
+        public async Task Register_With_Invalid_Password() {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "pass-";
@@ -185,8 +177,7 @@ namespace extraAhorroTesting
             var jsonWriter = new JsonTextWriter(streamWriter);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(jsonWriter, new
-            {
+            serializer.Serialize(jsonWriter, new {
                 email = mockEmail,
                 username = mockUsername,
                 password = mockPassword,
@@ -224,7 +215,7 @@ namespace extraAhorroTesting
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as easyCloud.Models.Responses.Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
             {
                 { "error", "password must have from 8 to 32 characters" }
             }
@@ -237,8 +228,7 @@ namespace extraAhorroTesting
             }, response.data);
         }
         [Fact]
-        public async Task Register_With_Invalid_Email()
-        {
+        public async Task Register_With_Invalid_Email() {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
@@ -258,8 +248,7 @@ namespace extraAhorroTesting
             var jsonWriter = new JsonTextWriter(streamWriter);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(jsonWriter, new
-            {
+            serializer.Serialize(jsonWriter, new {
                 email = mockEmail,
                 username = mockUsername,
                 password = mockPassword,
@@ -297,7 +286,7 @@ namespace extraAhorroTesting
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as easyCloud.Models.Responses.Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
             {
                 { "error", "invalid email" }
             }
@@ -310,8 +299,7 @@ namespace extraAhorroTesting
             }, response.data);
         }
         [Fact]
-        public async Task Register_Already_Registered_Email()
-        {
+        public async Task Register_Already_Registered_Email() {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
@@ -331,8 +319,7 @@ namespace extraAhorroTesting
             var jsonWriter = new JsonTextWriter(streamWriter);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(jsonWriter, new
-            {
+            serializer.Serialize(jsonWriter, new {
                 email = mockEmail,
                 username = mockUsername,
                 password = mockPassword,
@@ -373,7 +360,7 @@ namespace extraAhorroTesting
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as easyCloud.Models.Responses.Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
             {
                 { "error", "email already taken" }
             }
@@ -386,8 +373,7 @@ namespace extraAhorroTesting
             }, response.data);
         }
         [Fact]
-        public async Task Register_Already_Registered_Username()
-        {
+        public async Task Register_Already_Registered_Username() {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
@@ -407,8 +393,7 @@ namespace extraAhorroTesting
             var jsonWriter = new JsonTextWriter(streamWriter);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(jsonWriter, new
-            {
+            serializer.Serialize(jsonWriter, new {
                 email = mockEmail,
                 username = mockUsername,
                 password = mockPassword,
@@ -449,7 +434,7 @@ namespace extraAhorroTesting
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as easyCloud.Models.Responses.Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
             {
                 { "error", "username already taken" }
             }
@@ -460,40 +445,33 @@ namespace extraAhorroTesting
             {
                 { "error", "username already taken" }
             }, response.data);
-        }        
+        }
         [Fact]
-        public void Login_With_Valid_Credentials()
-        {
+        public void Login_With_Valid_Credentials() {
 
         }
         [Fact]
-        public void Login_With_Invalid_Credentials()
-        {
+        public void Login_With_Invalid_Credentials() {
 
         }
         [Fact]
-        public void Login_With_Unregistered_Credentials()
-        {
+        public void Login_With_Unregistered_Credentials() {
 
         }
         [Fact]
-        public void Login_With_Active_Session()
-        {
+        public void Login_With_Active_Session() {
 
         }
         [Fact]
-        public void Logout_With_Valid_Credentials()
-        {
+        public void Logout_With_Valid_Credentials() {
 
         }
         [Fact]
-        public void Logout_With_Invalid_Credentials()
-        {
+        public void Logout_With_Invalid_Credentials() {
 
         }
         [Fact]
-        public void Logout_With_No_Active_Session()
-        {
+        public void Logout_With_No_Active_Session() {
 
         }
     }
