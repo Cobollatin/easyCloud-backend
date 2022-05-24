@@ -29,7 +29,7 @@ namespace easyCloud {
         /// <returns></returns>
         [FunctionName("Register")]
         public static async Task<IActionResult> Register(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "register")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/register")] HttpRequest req,
             [Table("Users", Connection = "AzureWebJobsStorage")] IAsyncCollector<AccountTable> accountTableCollector,
             [Table("Users", Connection = "AzureWebJobsStorage")] CloudTable accountTable,
             ILogger log) {
@@ -134,7 +134,7 @@ namespace easyCloud {
         /// <returns></returns>
         [FunctionName("Login")]
         public static async Task<IActionResult> Login(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "login")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/login")] HttpRequest req,
         [Table("Users", Connection = "AzureWebJobsStorage")] CloudTable userTable,
         [Table("Sessions", Connection = "AzureWebJobsStorage")] IAsyncCollector<SessionTable> sessionTable,
         ILogger log) {
@@ -223,7 +223,7 @@ namespace easyCloud {
         /// <returns></returns>
         [FunctionName("Logout")]
         public static async Task<IActionResult> Logout(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "logout")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/logout")] HttpRequest req,
             [Table("Sessions", Connection = "AzureWebJobsStorage")] CloudTable sessionTable,
             ILogger log) {
             log.LogInformation("Attempting to logout an user");
@@ -268,6 +268,53 @@ namespace easyCloud {
             await sessionTable.ExecuteAsync(TableOperation.InsertOrReplace(lastSession));
 
             return new OkObjectResult(new Post<SessionTable>(new List<SessionTable> { lastSession }));
+        }
+
+        [FunctionName("Validate")]
+        public static async Task<IActionResult> Validate(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/validate")]
+            HttpRequest req,
+            [Table("Sessions", Connection = "AzureWebJobsStorage")]
+            CloudTable sessionTable,
+            ILogger log) {
+            log.LogInformation("Attempting to validate a session");
+
+            string accountToken = req.Query["AccountToken"];
+            string sessionToken = req.Query["SessionToken"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+
+            accountToken = accountToken ?? data?.accountToken;
+            sessionToken = sessionToken ?? data?.password;
+
+            if (!Guid.TryParse(accountToken, out _) || !Guid.TryParse(sessionToken, out _)) {
+                log.LogInformation("Invalid tokens");
+                Fail fail = new Fail(new Dictionary<string, string>()
+                    {
+                        { "error", "invalid data" }
+                    }
+                );
+                return new BadRequestObjectResult(fail);
+            }
+
+            var query = new TableQuery<SessionTable>().Where(TableQuery.GenerateFilterCondition("AccountToken", QueryComparisons.Equal, accountToken));
+            var queryResult = await sessionTable.ExecuteQuerySegmentedAsync(query, null);
+
+            var lastSession = queryResult.Results.Find(x => x.AccountToken == accountToken && x.IsActive == true);
+            if (queryResult is null || queryResult.Results.Count == 0 || lastSession is null) {
+                log.LogInformation("User not logged in");
+                Fail fail = new Fail(new Dictionary<string, string>()
+                    {
+                        { "error", "user not logged in" }
+                    }
+                );
+                return new OkObjectResult(fail);
+            }
+
+            log.LogInformation("Valid session out");
+
+            return new OkObjectResult(new Get<string>(new List<string> { "valid" }));
         }
     }
 }
