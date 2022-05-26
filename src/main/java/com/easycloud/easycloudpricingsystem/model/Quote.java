@@ -1,49 +1,47 @@
 package com.easycloud.easycloudpricingsystem.model;
 
 import com.azure.data.tables.models.TableEntity;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.tomcat.util.json.JSONParser;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class Quote {
-	public String      Id;
-	public String      Title;
-	public String      Description;
-	public Date        Date;
-	public JSONPObject CloudService;
-	public JSONPObject Price;
+	public String     id          = "";
+	public String     title       = "";
+	public String     description = "";
+	public LocalDate  date        = LocalDate.now();
+	public Object service     = null;
+	public Object price       = null;
 
-	public TableEntity ToQuoteTable(){
+	public TableEntity ToQuoteTable() {
 		String partitionKey = "quote";
-		String rowKey       = this.Id;
+		String rowKey       = this.id;
 
-		Map<String, Object> quoteInfo = new HashMap<>();
-		quoteInfo.put("title", this.Title);
-		quoteInfo.put("description", this.Description);
-		quoteInfo.put("date", this.Date);
-		quoteInfo.put("cloud_service", this.CloudService);
-		quoteInfo.put("price", this.Price);
+		TableEntity quoteTableEntity = new TableEntity(partitionKey, rowKey);
 
-		return new TableEntity(partitionKey, rowKey).setProperties(quoteInfo);
+		quoteTableEntity.addProperty("title", this.title);
+		quoteTableEntity.addProperty("description", this.description);
+		quoteTableEntity.addProperty("cloud_service", this.service.toString());
+		quoteTableEntity.addProperty("price", this.price.toString());
+
+		return quoteTableEntity;
 	}
 
-	public void ToQuoteObject(TableEntity tableEntity){
-		this.Id = tableEntity.getRowKey();
-		this.Title = (String) tableEntity.getProperty("title");
-		this.Description = (String) tableEntity.getProperty("description");
-		this.Date = (Date) tableEntity.getProperty("date");
-		this.CloudService = (JSONPObject) tableEntity.getProperty("cloud_service");
-		this.Price = (JSONPObject) tableEntity.getProperty("price");
+	public void ToQuoteObject(TableEntity tableEntity) {
+		this.id          = tableEntity.getRowKey();
+		this.title       = (String) tableEntity.getProperty("title");
+		this.description = (String) tableEntity.getProperty("description");
+		this.date        = tableEntity.getTimestamp().toLocalDate();
+		this.service     = tableEntity.getProperty("service");
+		this.price       = tableEntity.getProperty("price");
 	}
 }
 

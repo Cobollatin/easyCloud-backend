@@ -2,87 +2,88 @@ package com.easycloud.easycloudpricingsystem.repository;
 
 import com.azure.data.tables.TableClient;
 import com.azure.data.tables.TableClientBuilder;
+import com.azure.data.tables.TableServiceClient;
+import com.azure.data.tables.TableServiceClientBuilder;
 import com.azure.data.tables.models.TableEntity;
 import com.easycloud.easycloudpricingsystem.model.Quote;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+
 import java.util.UUID;
 
+@Slf4j
+@Repository
 public class QuoteRepository {
-	static String connectionString = System.getenv("ConnectionString");
+	private static final String tableName = "quotes";
 
-	public static Map<String, Object> addQuote(Quote quote) {
+	//@Value(value = "${connectionString}")
+	private final String connectionString ="DefaultEndpointsProtocol=https;AccountName=easycloudstorage;AccountKey=IblbKQ2NW9W/BHGE/niEBbjwu/ejyqBa7wYh6WSB25QR0h0V2kGYtG/zP4xpQoxg8ywZnc4wx27F+AStU83//A==;EndpointSuffix=core.windows.net";
+
+	QuoteRepository() {
 		try {
-			// Create a TableClient with a connection string and a table name.
-			TableClient tableClient = new TableClientBuilder().connectionString(connectionString).tableName(
-					"quotes").buildClient();
+			TableServiceClient tableServiceClient = new TableServiceClientBuilder().connectionString(
+					connectionString).buildClient();
+			TableClient tableClient = tableServiceClient.createTableIfNotExists(tableName);
 
-			// Create a new employee TableEntity.
-			quote.Id = UUID.randomUUID().toString();
-
-			while (tableClient.getEntity("quote", quote.Id) != null) {
-				quote.Id = UUID.randomUUID().toString();
-			}
-
-			TableEntity newQuote = quote.ToQuoteTable();
-
-			// Upsert the entity into the table
-			tableClient.upsertEntity(newQuote);
-
-			Map<String, Object> res = new HashMap<>();
-
-			res.put("status", "success");
-			res.put("payload", quote);
-
-			return res;
 		} catch (Exception e) {
-			// Output the stack trace.
-			e.printStackTrace();
-			Map<String, Object> res = new HashMap<>();
-
-			res.put("status", "error");
-			res.put("payload", e.getMessage());
-
-			return res;
+			log.error(e.getMessage());
 		}
 	}
 
-	public static Map<String, Object> getQuote(String id) {
+	public Quote addQuote(Quote quote) {
 		try {
-			final String tableName = "Employees";
+			TableClient tableClient = new TableClientBuilder().connectionString(connectionString).tableName(
+					tableName).buildClient();
+			quote.id = UUID.randomUUID().toString();
 
-			// Create a TableClient with a connection string and a table name.
+			TableEntity newQuote = quote.ToQuoteTable();
+			tableClient.createEntity(newQuote);
+			log.info("Quote created successfully!");
+			return quote;
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return null;
+		}
+	}
+
+	public Quote getQuote(String id) {
+		try {
+			TableClient tableClient = new TableClientBuilder().connectionString(connectionString).tableName(
+					tableName).buildClient();
+			TableEntity specificEntity = tableClient.getEntity(tableName, id);
+			if (specificEntity == null) {
+				log.warn("Quote doesnt exists!");
+				return null;
+			}
+			Quote quote = new Quote();
+			quote.ToQuoteObject(specificEntity);
+			log.info("Quote retrieved!");
+			return quote;
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return null;
+		}
+	}
+
+	public Quote updateQuote(Quote quote) {
+		try {
 			TableClient tableClient = new TableClientBuilder().connectionString(connectionString).tableName(
 					tableName).buildClient();
 
-			// Get the specific entity.
-			TableEntity specificEntity = tableClient.getEntity("quote", id);
+			TableEntity updatedQuote = tableClient.getEntity(tableName, quote.id);
 
-			Map<String, Object> res = new HashMap<>();
-			res.put("status", "success");
-
-			// Output the entity.
-			if (specificEntity == null) {
-				res.put("payload", "Quote doesnt exists.");
-				return res;
+			if (updatedQuote == null) {
+				log.warn("Quote doesnt exists!");
+				return null;
 			}
-
-			Quote quote = new Quote();
-			quote.ToQuoteObject(specificEntity);
-
-			res.put("payload", quote);
-
-			return res;
+			updatedQuote = quote.ToQuoteTable();
+			tableClient.upsertEntity(updatedQuote);
+			log.info("Quote updated successfully!");
+			return quote;
 		} catch (Exception e) {
-			// Output the stack trace.
-			e.printStackTrace();
-			Map<String, Object> res = new HashMap<>();
-
-			res.put("status", "error");
-			res.put("message", e.getMessage());
-
-			return res;
+			log.error(e.getMessage());
+			return null;
 		}
 	}
 
