@@ -7,7 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.6" />
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Quote\Controllers" />
+    <Folder Include="Quote\Persistence" />
+    <Folder Include="Quote\Services" />
+    <Folder Include="Supplier\Controllers" />
+    <Folder Include="Supplier\Persistence" />
+    <Folder Include="Supplier\Services" />
+    <Folder Include="User\Controllers" />
+    <Folder Include="User\Persistence" />
+    <Folder Include="User\Services" />
   </ItemGroup>
 
 </Project>
