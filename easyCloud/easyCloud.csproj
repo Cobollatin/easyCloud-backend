@@ -15,15 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Quote\Controllers" />
     <Folder Include="Quote\Persistence" />
     <Folder Include="Quote\Services" />
     <Folder Include="Provider\Persistence" />
     <Folder Include="Provider\Services" />
-    <Folder Include="Record\Controllers" />
     <Folder Include="Record\Persistence" />
     <Folder Include="Record\Services" />
-    <Folder Include="User\Controllers" />
     <Folder Include="User\Persistence" />
     <Folder Include="User\Services" />
   </ItemGroup>
