@@ -5,21 +5,25 @@ import com.easycloud.easycloudpricingsystem.repository.QuoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class QuoteService {
 	private final QuoteRepository quoteRepository;
 
-	public Quote add(Quote quote) {
+	public Optional<Quote> add(Quote quote) {
 		return quoteRepository.addQuote(quote);
 	}
 
-	public Quote get(String id) {
-		return quoteRepository.getQuote(id);
+	public Optional<Object> get(String userId, List<String> providersId, LocalDate startDate, LocalDate endDate) {
+		return quoteRepository.getQuotes(userId, providersId, startDate, endDate);
 	}
 
-	public Quote update(Quote quote) {
-		return quoteRepository.updateQuote(quote);
+	public Optional<Boolean> delete(String id, String userId) {
+		return quoteRepository.delete(id, userId);
 	}
 
 }

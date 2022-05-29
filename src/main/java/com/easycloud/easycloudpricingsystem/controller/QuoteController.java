@@ -7,8 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -19,42 +23,54 @@ public class QuoteController {
 	@Autowired
 	private QuoteService quoteService;
 
-	@PostMapping(value = "/add")
-	public ResponseEntity<Map<String, Object>> addQuote(@RequestBody Quote quote) {
+	@PostMapping(value = "/add/{userId}/{providerId}")
+	public ResponseEntity<Map<String, Object>> addQuote(
+			@PathVariable String userId, @PathVariable String providerId, @RequestBody Quote quote
+	) {
 		try {
-			quote = quoteService.add(quote);
-			return __HANDLE_RESPONSE__(quote, "Invalid object type");
+			quote.setUser(userId);
+			quote.setProvider(providerId);
+			return __HANDLE_RESPONSE__(Optional.of(quoteService.add(quote).get()), "Invalid object type");
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return ResponseEntity.internalServerError().build();
 		}
 	}
 
-	@GetMapping(value = "/get/{id}")
-	public ResponseEntity<Map<String, Object>> getQuote(@PathVariable String id) {
+	@GetMapping(value = "/get/{userId}")
+	public ResponseEntity<Map<String, Object>> getQuote(
+			@PathVariable String userId, @RequestBody Map<String, Object> params
+	) {
 		try {
-			Quote quote = quoteService.get(id);
-			return __HANDLE_RESPONSE__(quote, "Quote not found");
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+			Optional<Object> quotes = quoteService.get(userId, Arrays.asList(params.get("providers").toString().split(
+					                                           ",")),
+			                                           LocalDate.parse(params.get("start").toString(), df),
+			                                           LocalDate.parse(params.get("end").toString(), df));
+			if (quotes.isPresent()) {
+				return __HANDLE_RESPONSE__(quotes, "Invalid object type");
+			} else {
+				return ResponseEntity.notFound().build();
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return ResponseEntity.internalServerError().build();
 		}
 	}
 
-	@PostMapping(value = "/update")
-	public ResponseEntity<Map<String, Object>> updateQuote(@RequestBody Quote quote) {
+	@PostMapping(value = "/add/{userId}/{quoteId}")
+	public ResponseEntity<Map<String, Object>> deleteQuote(@PathVariable String userId, @PathVariable String quoteId) {
 		try {
-			quote = quoteService.update(quote);
-			return __HANDLE_RESPONSE__(quote, "Quote not found");
+			return __HANDLE_RESPONSE__(Optional.of(quoteService.delete(quoteId, userId)), "Invalid object type");
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return ResponseEntity.internalServerError().build();
 		}
 	}
 
-	private ResponseEntity<Map<String, Object>> __HANDLE_RESPONSE__(Quote object, String message) {
+	private ResponseEntity<Map<String, Object>> __HANDLE_RESPONSE__(Optional<Object> object, String message) {
 		Map<String, Object> res = new HashMap<>();
-		if (object == null) {
+		if (object.isEmpty()) {
 			res.put("status", "fail");
 			res.put("message", message);
 			return ResponseEntity.ok(res);
