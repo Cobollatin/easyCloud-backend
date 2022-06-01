@@ -12,7 +12,7 @@ using System.Net.Mail;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.IO;
-using easyCloud.Models.Shared;
+using easyCloud.Models.Shared.Responses;
 
 namespace easyCloud {
     /// <summary>

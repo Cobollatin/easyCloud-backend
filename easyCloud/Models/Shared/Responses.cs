@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace easyCloud.Models.Shared {
+namespace easyCloud.Models.Shared.Responses {
 
     public class Error {
         public string status { get; set; } = "error";

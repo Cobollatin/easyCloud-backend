@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Moq;
 using Xunit;
 using Microsoft.Azure.Cosmos.Table;
-using easyCloud.Models;
 using Microsoft.Azure.WebJobs;
 using System.Collections.Generic;
 using System.Reflection;
@@ -13,10 +12,14 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.IO;
-using Newtonsoft.Json;
-using easyCloud.Models.Shared;
 
-namespace extraAhorroTesting {
+using easyCloud.Models;
+using easyCloud.Models.Shared.Responses;
+
+using Newtonsoft.Json;
+using easyCloud.Models.Shared.Responses;
+
+namespace easycloudTesting {
 
     public class LoginSystemTest {
         [Fact]
@@ -24,7 +27,7 @@ namespace extraAhorroTesting {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
-            const string mockEmail = "test@extraahorro";
+            const string mockEmail = "test@easycloud";
             var mockAccountCollector = new Mock<IAsyncCollector<AccountTable>>();
             var mockAccountTable = new Mock<CloudTable>(new Uri("http://unittests.localhost.com/FakeTable"), It.IsAny<TableClientConfiguration>());
             var loggerMock = new Mock<ILogger>();
@@ -78,10 +81,10 @@ namespace extraAhorroTesting {
 
             Assert.NotNull(okObjectResult);
 
-            var response = okObjectResult.Value as Post<Account> ?? new easyCloud.Models.Responses.Post<Account>(new List<Account>());
+            var response = okObjectResult.Value as Post<Account> ?? new Post<Account>(new List<Account>());
 
             Assert.Equal("success", response.status);
-            Assert.Equal("test@extraahorro", response.data[0].Email);
+            Assert.Equal("test@easycloud", response.data[0].Email);
             Assert.Equal("username", response.data[0].Username);
             Assert.Equal("*", response.data[0].Password);
         }
@@ -90,7 +93,7 @@ namespace extraAhorroTesting {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "user-";
             const string mockPassword = "password";
-            const string mockEmail = "test@extraahorro";
+            const string mockEmail = "test@easycloud";
             var mockAccountCollector = new Mock<IAsyncCollector<AccountTable>>();
             var mockAccountTable = new Mock<CloudTable>(new Uri("http://unittests.localhost.com/FakeTable"), It.IsAny<TableClientConfiguration>());
             var loggerMock = new Mock<ILogger>();
@@ -144,7 +147,7 @@ namespace extraAhorroTesting {
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new Fail(new Dictionary<string, string>()
             {
                 { "error", "username must have from 4 to 12 characters" }
             }
@@ -161,7 +164,7 @@ namespace extraAhorroTesting {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "pass-";
-            const string mockEmail = "test@extraahorro";
+            const string mockEmail = "test@easycloud";
             var mockAccountCollector = new Mock<IAsyncCollector<AccountTable>>();
             var mockAccountTable = new Mock<CloudTable>(new Uri("http://unittests.localhost.com/FakeTable"), It.IsAny<TableClientConfiguration>());
             var loggerMock = new Mock<ILogger>();
@@ -215,7 +218,7 @@ namespace extraAhorroTesting {
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new Fail(new Dictionary<string, string>()
             {
                 { "error", "password must have from 8 to 32 characters" }
             }
@@ -232,7 +235,7 @@ namespace extraAhorroTesting {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
-            const string mockEmail = "test-extraahorro";
+            const string mockEmail = "test-easycloud";
             var mockAccountCollector = new Mock<IAsyncCollector<AccountTable>>();
             var mockAccountTable = new Mock<CloudTable>(new Uri("http://unittests.localhost.com/FakeTable"), It.IsAny<TableClientConfiguration>());
             var loggerMock = new Mock<ILogger>();
@@ -286,7 +289,7 @@ namespace extraAhorroTesting {
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new Fail(new Dictionary<string, string>()
             {
                 { "error", "invalid email" }
             }
@@ -303,7 +306,7 @@ namespace extraAhorroTesting {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
-            const string mockEmail = "test@extraahorro";
+            const string mockEmail = "test@easycloud";
             var mockAccountCollector = new Mock<IAsyncCollector<AccountTable>>();
             var mockAccountTable = new Mock<CloudTable>(new Uri("http://unittests.localhost.com/FakeTable"), It.IsAny<TableClientConfiguration>());
             var loggerMock = new Mock<ILogger>();
@@ -360,7 +363,7 @@ namespace extraAhorroTesting {
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new Fail(new Dictionary<string, string>()
             {
                 { "error", "email already taken" }
             }
@@ -377,7 +380,7 @@ namespace extraAhorroTesting {
             var mockHttpRequest = new Mock<HttpRequest>();
             const string mockUsername = "username";
             const string mockPassword = "password";
-            const string mockEmail = "test@extraahorro";
+            const string mockEmail = "test@easycloud";
             var mockAccountCollector = new Mock<IAsyncCollector<AccountTable>>();
             var mockAccountTable = new Mock<CloudTable>(new Uri("http://unittests.localhost.com/FakeTable"), It.IsAny<TableClientConfiguration>());
             var loggerMock = new Mock<ILogger>();
@@ -434,7 +437,7 @@ namespace extraAhorroTesting {
 
             Assert.NotNull(badObjectResult);
 
-            var response = badObjectResult.Value as Fail ?? new easyCloud.Models.Responses.Fail(new Dictionary<string, string>()
+            var response = badObjectResult.Value as Fail ?? new Fail(new Dictionary<string, string>()
             {
                 { "error", "username already taken" }
             }
