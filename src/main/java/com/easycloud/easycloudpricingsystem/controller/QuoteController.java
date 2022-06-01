@@ -58,16 +58,6 @@ public class QuoteController {
 		}
 	}
 
-	@PostMapping(value = "/add/{userId}/{quoteId}")
-	public ResponseEntity<Map<String, Object>> deleteQuote(@PathVariable String userId, @PathVariable String quoteId) {
-		try {
-			return __HANDLE_RESPONSE__(Optional.of(quoteService.delete(quoteId, userId)), "Invalid object type");
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			return ResponseEntity.internalServerError().build();
-		}
-	}
-
 	private ResponseEntity<Map<String, Object>> __HANDLE_RESPONSE__(Optional<Object> object, String message) {
 		Map<String, Object> res = new HashMap<>();
 		if (object.isEmpty()) {
