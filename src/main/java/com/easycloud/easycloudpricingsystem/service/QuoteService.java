@@ -21,9 +21,4 @@ public class QuoteService {
 	public Optional<Object> get(String userId, List<String> providersId, LocalDate startDate, LocalDate endDate) {
 		return quoteRepository.getQuotes(userId, providersId, startDate, endDate);
 	}
-
-	public Optional<Boolean> delete(String id, String userId) {
-		return quoteRepository.delete(id, userId);
-	}
-
 }

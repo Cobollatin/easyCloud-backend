@@ -59,12 +59,12 @@ public class QuoteRepository {
 			TableClient tableClient = new TableClientBuilder().connectionString(connectionString).tableName(
 					tableName).buildClient();
 
-			Timestamp    start     = Timestamp.valueOf(startDate.atStartOfDay());
-			Timestamp    end       = Timestamp.valueOf(endDate.atTime(23, 59, 59));
+			Timestamp start = Timestamp.valueOf(startDate.atStartOfDay());
+			Timestamp end   = Timestamp.valueOf(endDate.atTime(23, 59, 59));
 
 			StringBuilder filter = new StringBuilder(
-					"PartitionKey eq '" + userId + "' and " + "Timestamp ge datetime'" + start + "' and " + "Timestamp " +
-							"le datetime'" + end + "'");
+					"PartitionKey eq '" + userId + "' and " + "Timestamp ge datetime'" + start + "' and " + "Timestamp" +
+							" " + "le datetime'" + end + "'");
 
 			filter.append(" and (");
 			for (int i = 0; i < providersId.size(); i++) {
@@ -88,23 +88,6 @@ public class QuoteRepository {
 			}
 			log.info("Quotes retrieved!");
 			return Optional.of(quotes);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			return Optional.empty();
-		}
-	}
-
-	public Optional<Boolean> delete(String id, String userId) {
-		try {
-			TableClient tableClient = new TableClientBuilder().connectionString(connectionString).tableName(
-					tableName).buildClient();
-			TableEntity entity = tableClient.getEntity(id, userId);
-			if (entity == null) {
-				log.warn("Quote doesnt exists!");
-				return Optional.of(false);
-			}
-			tableClient.deleteEntity(id, userId);
-			return Optional.of(true);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return Optional.empty();
