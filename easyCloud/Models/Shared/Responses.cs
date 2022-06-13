@@ -3,45 +3,15 @@ using System.Collections.Generic;
 
 namespace easyCloud.Models.Shared {
 
-    public class Error {
-        public string status { get; set; } = "error";
-        public string message { get; set; } = null;
+    public class RequestResponse {
 
-        public Error(string message) {
-            this.message = message;
+        public RequestResponse(string status, Dictionary<string, dynamic> payload) {
+            Status = status;
+            Payload = payload;
         }
-    }
 
-    public class Fail {
-        public string status { get; set; } = "fail";
-        public Dictionary<string, string> data { get; set; } = null;
-
-        public Fail(Dictionary<string, string> data) {
-            this.data = data;
-        }
-    }
-
-    public class Get<T> {
-        public string status { get; set; } = "success";
-        public List<T> data { get; set; } = null;
-
-        public Get(List<T> data) {
-            this.data = data;
-        }
-    }
-
-    public class Post<T> {
-        public string status { get; set; } = "success";
-        public List<T> data { get; set; } = new List<T>();
-
-        public Post(List<T> data) {
-            this.data = data;
-        }
-    }
-
-    public class Delete<T> {
-        public string status { get; set; } = "success";
-        public string data { get; set; } = null;
+        public string Status { get; set; } = "error";
+        public Dictionary<string, dynamic> Payload { get; set; }
     }
 
 }
