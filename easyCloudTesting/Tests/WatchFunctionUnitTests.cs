@@ -16,6 +16,7 @@ using System.IO;
 using Newtonsoft.Json;
 using easyCloud.Models.Shared;
 using easyCloud;
+using easyCloud.Models.Shared.Responses;
 
 namespace extraAhorroTesting {
 
