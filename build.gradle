@@ -25,8 +25,11 @@ ext {
 dependencies {
     implementation platform('com.azure:azure-sdk-bom:1.1.0')
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'de.codecentric:spring-boot-admin-starter-client:2.7.0'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    implementation 'com.azure:azure-data-tables:12.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.azure:azure-data-tables:12.3.1'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

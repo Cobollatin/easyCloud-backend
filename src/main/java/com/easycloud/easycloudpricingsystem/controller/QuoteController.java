@@ -17,12 +17,9 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/quote")
-
 public class QuoteController {
-
 	@Autowired
 	private QuoteService quoteService;
-
 	@PostMapping(value = "/add/{userId}/{providerId}")
 	public ResponseEntity<Map<String, Object>> addQuote(
 			@PathVariable String userId, @PathVariable String providerId, @RequestBody Quote quote
@@ -33,10 +30,9 @@ public class QuoteController {
 			return __HANDLE_RESPONSE__(Optional.of(quoteService.add(quote).get()), "Invalid object type");
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return ResponseEntity.internalServerError().build();
+			return ResponseEntity.badRequest().build();
 		}
 	}
-
 	@GetMapping(value = "/get/{userId}")
 	public ResponseEntity<Map<String, Object>> getQuote(
 			@PathVariable String userId, @RequestBody Map<String, Object> params
@@ -54,10 +50,9 @@ public class QuoteController {
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return ResponseEntity.internalServerError().build();
+			return ResponseEntity.badRequest().build();
 		}
 	}
-
 	private ResponseEntity<Map<String, Object>> __HANDLE_RESPONSE__(Optional<Object> object, String message) {
 		Map<String, Object> res = new HashMap<>();
 		if (object.isEmpty()) {
@@ -69,5 +64,4 @@ public class QuoteController {
 		res.put("payload", object);
 		return ResponseEntity.ok(res);
 	}
-
 }

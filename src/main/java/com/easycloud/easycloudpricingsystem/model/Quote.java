@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Getter
 @Setter
 public class Quote {
